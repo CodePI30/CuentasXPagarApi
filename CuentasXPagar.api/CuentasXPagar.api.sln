@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CuentasXPagar.api", "CuentasXPagar.api.csproj", "{FF8B0788-0CC8-4B7E-9755-AABF5C1E7111}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CuentasXPagar.data", "..\CuentasXPagar.data\CuentasXPagar.data.csproj", "{BC676116-188E-4085-B8B3-FF9F7BB12710}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF8B0788-0CC8-4B7E-9755-AABF5C1E7111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF8B0788-0CC8-4B7E-9755-AABF5C1E7111}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF8B0788-0CC8-4B7E-9755-AABF5C1E7111}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF8B0788-0CC8-4B7E-9755-AABF5C1E7111}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC676116-188E-4085-B8B3-FF9F7BB12710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC676116-188E-4085-B8B3-FF9F7BB12710}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC676116-188E-4085-B8B3-FF9F7BB12710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC676116-188E-4085-B8B3-FF9F7BB12710}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {505C41CF-62D2-4461-A32B-650E37A3A4F5}
+	EndGlobalSection
+EndGlobal
