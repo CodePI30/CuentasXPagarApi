@@ -1,4 +1,4 @@
-using CuentasXPagar.data.DbContextPostGreSql;
+using CuentasXPagar.data.DbContextSqlServer;
 using Microsoft.EntityFrameworkCore;
 
 namespace CuentasXPagar.api
@@ -13,22 +13,31 @@ namespace CuentasXPagar.api
 
             builder.Services.AddControllers();
 
+            // *** AGREGAR CORS ***
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("PermitirReactLocalhost",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:3000") // Puerto donde corre React
+                              .AllowAnyHeader()
+                              .AllowAnyMethod();
+                    });
+            });
+
             var connectionString =
-                 builder.Configuration.GetConnectionString("DefaultConnection")
-                 ?? throw new InvalidOperationException("Connection String" + "'DefaultConnection' not found");
+                builder.Configuration.GetConnectionString("DefaultConnection")
+                ?? throw new InvalidOperationException("Connection String 'DefaultConnection' not found");
 
-            // Register the DbContext with the connection string
+            // Registrar el DbContext usando SQL Server
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(connectionString));
+                options.UseSqlServer(connectionString));
 
-
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -37,8 +46,10 @@ namespace CuentasXPagar.api
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            // *** USAR CORS ***
+            app.UseCors("PermitirReactLocalhost");
 
+            app.UseAuthorization();
 
             app.MapControllers();
 

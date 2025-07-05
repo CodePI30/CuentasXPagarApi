@@ -1,7 +1,7 @@
 ﻿using CuentasXPagar.data.Entidades;
 using Microsoft.EntityFrameworkCore;
 
-namespace CuentasXPagar.data.DbContextPostGreSql
+namespace CuentasXPagar.data.DbContextSqlServer
 {
     public class ApplicationDbContext : DbContext
     {

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CuentasXPagar.data.DbContextPostGreSql;
+using CuentasXPagar.data.DbContextSqlServer ;
 using CuentasXPagar.data.Entidades;
 
 namespace CuentasXPagar.api.Controllers
@@ -43,7 +43,6 @@ namespace CuentasXPagar.api.Controllers
         }
 
         // PUT: api/DocumentoXPagar/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDocumentoPagar(int id, DocumentoPagar documentoPagar)
         {
@@ -52,11 +51,20 @@ namespace CuentasXPagar.api.Controllers
                 return BadRequest();
             }
 
+            var documentoAnterior = await _context.DocumentoPago.AsNoTracking().FirstOrDefaultAsync(d => d.id == id);
+            if (documentoAnterior == null)
+            {
+                return NotFound();
+            }
+
             _context.Entry(documentoPagar).State = EntityState.Modified;
 
             try
             {
                 await _context.SaveChangesAsync();
+
+                // Log update
+                await LogOperacionAsync("documentos_pagar", "UPDATE", datosAnteriores: documentoAnterior, datosNuevos: documentoPagar);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -74,12 +82,14 @@ namespace CuentasXPagar.api.Controllers
         }
 
         // POST: api/DocumentoXPagar
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<DocumentoPagar>> PostDocumentoPagar(DocumentoPagar documentoPagar)
         {
             _context.DocumentoPago.Add(documentoPagar);
             await _context.SaveChangesAsync();
+
+            // Log insert
+            await LogOperacionAsync("documentos_pagar", "INSERT", datosNuevos: documentoPagar);
 
             return CreatedAtAction("GetDocumentoPagar", new { id = documentoPagar.id }, documentoPagar);
         }
@@ -97,12 +107,48 @@ namespace CuentasXPagar.api.Controllers
             _context.DocumentoPago.Remove(documentoPagar);
             await _context.SaveChangesAsync();
 
+            // Log delete
+            await LogOperacionAsync("documentos_pagar", "DELETE", datosAnteriores: documentoPagar);
+
             return NoContent();
         }
+
 
         private bool DocumentoPagarExists(int id)
         {
             return _context.DocumentoPago.Any(e => e.id == id);
+        }
+
+        private string GetClientIp()
+        {
+            if (Request.Headers.ContainsKey("X-Forwarded-For"))
+            {
+                var ipList = Request.Headers["X-Forwarded-For"].ToString();
+                if (!string.IsNullOrEmpty(ipList))
+                {
+                    return ipList.Split(',')[0];
+                }
+            }
+
+            return HttpContext.Connection.RemoteIpAddress?.ToString() ?? "IP desconocida";
+        }
+
+        private async Task LogOperacionAsync(string tabla, string operacion, object datosAnteriores = null, object datosNuevos = null)
+        {
+            var usuario = GetClientIp();
+
+            var log = new LogOperacion
+            {
+                tabla_afectada = tabla,
+                tipo_operacion = operacion,
+                usuario = usuario,
+                datos_anteriores = datosAnteriores != null ? System.Text.Json.JsonSerializer.Serialize(datosAnteriores) : null,
+                datos_nuevos = datosNuevos != null ? System.Text.Json.JsonSerializer.Serialize(datosNuevos) : null,
+                fecha_operacion = DateTime.UtcNow
+            };
+
+            _context.LogsOperaciones.Add(log);
+            await _context.SaveChangesAsync();
         }
     }
 }

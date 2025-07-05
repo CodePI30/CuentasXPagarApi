@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CuentasXPagar.data.DbContextPostGreSql;
+using CuentasXPagar.data.DbContextSqlServer ;
 using CuentasXPagar.data.Entidades;
 
 namespace CuentasXPagar.api.Controllers
