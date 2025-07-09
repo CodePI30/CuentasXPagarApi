@@ -7,13 +7,13 @@ namespace CuentasXPagar.data.Entidades
         public int id { get; set; }
 
         [Required, MaxLength(100)]
-        public string? nombre { get; set; }
+        public string nombre { get; set; }
 
         [Required, MaxLength(20)]
-        public string? tipo_persona { get; set; } // Valid values: "fisica", "juridica"
+        public string tipo_persona { get; set; } // Valid values: "fisica", "juridica"
 
         [Required, MaxLength(20)]
-        public string? cedula_rnc { get; set; }
+        public string cedula_rnc { get; set; }
 
         public decimal balance { get; set; } = 0.00M;
 
