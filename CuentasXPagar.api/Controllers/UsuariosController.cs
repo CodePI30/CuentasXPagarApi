@@ -28,19 +28,23 @@ namespace CuentasXPagar.api.Controllers
             return await _context.Usuarios.ToListAsync();
         }
 
-        // GET: api/Usuarios/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetUsuario(int id)
+        // GET /api/Usuario/{nomUsuario}/{contrasena}
+        [HttpGet("Usuario/{nomUsuario}/{contrasena}")]
+        public async Task<ActionResult<Usuario>> GetUsuario(string nomUsuario, string contrasena)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
+            var usuario = await _context.Usuarios
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u =>
+                    u.nombre_usuario == nomUsuario &&
+                    u.contrasena == contrasena); // Asegúrate de que el campo se llame así
 
-            if (usuario == null)
-            {
-                return NotFound();
-            }
+            if (usuario is null)
+                return NotFound("Usuario o contraseña incorrectos");
 
-            return usuario;
+            return Ok(usuario);
         }
+
+
 
         // PUT: api/Usuarios/5
         [HttpPut("{id}")]
