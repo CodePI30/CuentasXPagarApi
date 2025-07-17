@@ -16,13 +16,13 @@ namespace CuentasXPagar.api
             // *** AGREGAR CORS ***
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("PermitirReactLocalhost",
-                    policy =>
-                    {
-                        policy.WithOrigins("http://localhost:3000") // Puerto donde corre React
-                              .AllowAnyHeader()
-                              .AllowAnyMethod();
-                    });
+                options.AddPolicy("PermitirTodos", policy =>
+                {
+                    policy
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
             });
 
             var connectionString =
@@ -38,16 +38,19 @@ namespace CuentasXPagar.api
 
             var app = builder.Build();
 
-            if (app.Environment.IsDevelopment())
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "CuentasXPagarAPI v1");
+                c.RoutePrefix = "swagger"; // Esto mantiene la ruta en /swagger
+            });
 
             app.UseHttpsRedirection();
 
+            app.UseRouting();
+
             // *** USAR CORS ***
-            app.UseCors("PermitirReactLocalhost");
+            app.UseCors("PermitirTodos");
 
             app.UseAuthorization();
 
