@@ -29,5 +29,7 @@ namespace CuentasXPagar.data.Entidades
 
         [MaxLength(20)]
         public string estado_pago { get; set; } = "Pendiente"; // Valid values: "Pendiente", "Pagado"
+
+        public string? asientoId { get; set; }
     }
 }
