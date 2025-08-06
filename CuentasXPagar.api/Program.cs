@@ -1,3 +1,6 @@
+using CuentasXPagar.api.BulkUpdate;
+using CuentasXPagar.api.Endpoints;
+using CuentasXPagar.api.HttpService;
 using CuentasXPagar.data.DbContextSqlServer;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,8 +36,12 @@ namespace CuentasXPagar.api
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            builder.Services.AddHttpClient();
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<ContabilidadHttpService>();
+            builder.Services.AddScoped<BulkUpdateData>();
 
             var app = builder.Build();
 

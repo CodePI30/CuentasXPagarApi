@@ -8,7 +8,7 @@ namespace CuentasXPagar.data.Entidades
         public int id { get; set; }
 
         [Required, MaxLength(20)]
-        public string? numero_documento { get; set; }
+        public string numero_documento { get; set; }
 
         [Required, MaxLength(20)]
         public string? numero_factura { get; set; }
