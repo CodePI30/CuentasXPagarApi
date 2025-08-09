@@ -44,6 +44,17 @@ namespace CuentasXPagar.api.Controllers
             return Ok(usuario);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Usuario>> GetUsuarioById(int id)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
+
+            if (usuario == null)
+                return NotFound();
+
+            return usuario;
+        }
+
 
 
         // PUT: api/Usuarios/5
@@ -95,7 +106,7 @@ namespace CuentasXPagar.api.Controllers
             // Log insert
             await LogOperacionAsync("usuarios", "INSERT", datosNuevos: usuario);
 
-            return CreatedAtAction("GetUsuario", new { id = usuario.id }, usuario);
+            return CreatedAtAction("GetUsuarioById", new { id = usuario.id }, usuario);
         }
 
         // DELETE: api/Usuarios/5

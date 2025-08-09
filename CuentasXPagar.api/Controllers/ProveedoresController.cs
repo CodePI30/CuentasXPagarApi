@@ -51,10 +51,10 @@ namespace CuentasXPagar.api.Controllers
                 return BadRequest();
             }
 
-            if (!ValidarCedulaORnc(proveedor.cedula_rnc))
-            {
-                return BadRequest("El RNC o cédula no es válido.");
-            }
+            //if (!ValidarCedulaORnc(proveedor.cedula_rnc))
+            //{
+            //    return BadRequest("El RNC o cédula no es válido.");
+            //}
 
 
             var proveedorAnterior = await _context.Proveedores.AsNoTracking().FirstOrDefaultAsync(p => p.id == id);
@@ -90,10 +90,10 @@ namespace CuentasXPagar.api.Controllers
         [HttpPost]
         public async Task<ActionResult<Proveedor>> PostProveedor(Proveedor proveedor)
         {
-            if (!ValidarCedulaORnc(proveedor.cedula_rnc))
-            {
-                return BadRequest("El RNC o cédula no es válido.");
-            }
+            //if (!ValidarCedulaORnc(proveedor.cedula_rnc))
+            //{
+            //    return BadRequest("El RNC o cédula no es válido.");
+            //}
 
             _context.Proveedores.Add(proveedor);
             await _context.SaveChangesAsync();
@@ -161,27 +161,27 @@ namespace CuentasXPagar.api.Controllers
             await _context.SaveChangesAsync();
         }
 
-        public static bool ValidarCedulaORnc(string numero)
-        {
-            if (string.IsNullOrWhiteSpace(numero)) return false;
+        //public static bool ValidarCedulaORnc(string numero)
+        //{
+        //    if (string.IsNullOrWhiteSpace(numero)) return false;
 
-            numero = numero.Replace("-", "").Trim();
+        //    numero = numero.Replace("-", "").Trim();
 
-            if (numero.Length != 11 || !numero.All(char.IsDigit)) return false;
+        //    if (numero.Length != 11 || !numero.All(char.IsDigit)) return false;
 
-            int[] pesos = new int[] { 1, 2, 1, 2, 1, 2, 1, 2, 1, 2 };
-            int suma = 0;
+        //    int[] pesos = new int[] { 1, 2, 1, 2, 1, 2, 1, 2, 1, 2 };
+        //    int suma = 0;
 
-            for (int i = 0; i < 10; i++)
-            {
-                int multiplicacion = (numero[i] - '0') * pesos[i];
-                suma += (multiplicacion < 10) ? multiplicacion : (multiplicacion / 10) + (multiplicacion % 10);
-            }
+        //    for (int i = 0; i < 10; i++)
+        //    {
+        //        int multiplicacion = (numero[i] - '0') * pesos[i];
+        //        suma += (multiplicacion < 10) ? multiplicacion : (multiplicacion / 10) + (multiplicacion % 10);
+        //    }
 
-            int digitoVerificador = (10 - (suma % 10)) % 10;
+        //    int digitoVerificador = (10 - (suma % 10)) % 10;
 
-            return digitoVerificador == (numero[10] - '0');
-        }
+        //    return digitoVerificador == (numero[10] - '0');
+        //}
 
     }
 }
